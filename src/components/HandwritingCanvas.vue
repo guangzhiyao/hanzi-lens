@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center gap-2">
-    <div class="border-2 border-gray-300 rounded-xl overflow-hidden bg-white shadow-sm">
+    <div class="border-2 border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
       <canvas
         ref="canvasEl"
         :width="canvasSize"
@@ -17,32 +17,33 @@
     </div>
     <div class="flex gap-2">
       <button
-        class="px-4 py-1.5 text-sm border border-gray-300 rounded-lg bg-white hover:bg-gray-100 transition-colors disabled:opacity-40 disabled:cursor-default"
+        class="px-4 py-1.5 text-sm border rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-40 disabled:cursor-default border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
         :disabled="strokes.length === 0"
         @click="undoStroke"
       >
         Undo
       </button>
       <button
-        class="px-4 py-1.5 text-sm border border-gray-300 rounded-lg bg-white hover:bg-gray-100 transition-colors disabled:opacity-40 disabled:cursor-default"
+        class="px-4 py-1.5 text-sm border rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-40 disabled:cursor-default border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
         :disabled="strokes.length === 0"
         @click="clearCanvas"
       >
         Clear
       </button>
     </div>
-    <div v-if="!ready" class="text-xs text-gray-400">Loading recognition engine...</div>
+    <div v-if="!ready" class="text-xs text-gray-400 dark:text-gray-500">Loading recognition engine...</div>
     <div v-else-if="loading" class="text-xs text-blue-500 animate-pulse">Recognizing...</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import type { StrokeData } from '../types/hanzi-lookup'
 
 const props = defineProps<{
   ready: boolean
   loading: boolean
+  isDark: boolean
 }>()
 
 const emit = defineEmits<{
@@ -58,11 +59,20 @@ const isDrawing = ref(false)
 
 let ctx: CanvasRenderingContext2D | null = null
 
+const gridColor = () => props.isDark ? '#525252' : '#d4d4d4'
+const gridBorder = () => props.isDark ? '#404040' : '#e5e5e5'
+const strokeColor = () => props.isDark ? '#e2e8f0' : '#1e293b'
+
 onMounted(() => {
   if (canvasEl.value) {
     ctx = canvasEl.value.getContext('2d')
     drawGrid()
   }
+})
+
+// Redraw on dark mode toggle
+watch(() => props.isDark, () => {
+  drawAllStrokes()
 })
 
 function getPos(e: MouseEvent | Touch): [number, number] {
@@ -82,14 +92,14 @@ function drawGrid() {
   ctx.clearRect(0, 0, width, height)
   ctx.setLineDash([2, 2])
   ctx.lineWidth = 0.5
-  ctx.strokeStyle = '#d4d4d4'
+  ctx.strokeStyle = gridColor()
   const midX = width / 2, midY = height / 2
   ctx.beginPath(); ctx.moveTo(midX, 0); ctx.lineTo(midX, height); ctx.stroke()
   ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(width, midY); ctx.stroke()
   ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(width, height); ctx.stroke()
   ctx.beginPath(); ctx.moveTo(width, 0); ctx.lineTo(0, height); ctx.stroke()
   ctx.setLineDash([])
-  ctx.strokeStyle = '#e5e5e5'
+  ctx.strokeStyle = gridBorder()
   ctx.strokeRect(0, 0, width, height)
 }
 
@@ -100,7 +110,7 @@ function drawAllStrokes() {
   ctx.lineWidth = 4
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
-  ctx.strokeStyle = '#1e293b'
+  ctx.strokeStyle = strokeColor()
 
   const allStrokes = [...strokes.value, ...(currentStroke.value.length ? [currentStroke.value] : [])]
   for (const stroke of allStrokes) {
