@@ -1,0 +1,54 @@
+MIT License
+
+Copyright (c) 2026
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Licenses
+
+This project includes or depends on the following third-party works:
+
+### Hanzi Writer
+- Repository: https://github.com/chanind/hanzi-writer
+- License: MIT
+- Used for: SVG stroke order rendering and animations
+
+### hanzi_lookup
+- Repository: https://github.com/gugray/hanzi_lookup
+- License: LGPL-3.0
+- Used for: Handwriting recognition (compiled to WebAssembly)
+- The source code for hanzi_lookup is available at the repository above.
+  The COPYING and COPYING.LESSER files from LGPL-3.0 apply to the hanzi_lookup component.
+
+### Make Me a Hanzi (stroke data)
+- Repository: https://github.com/skishore/makemeahanzi
+- License: Arphic Public License
+- Used for: Character stroke order data
+- The stroke data was originally extracted from fonts by Arphic Technology,
+  a Taiwanese font foundry that released their work under the
+  Arphic Public License in 1999.
+
+### CC-CEDICT (dictionary data)
+- Website: https://cc-cedict.org/wiki/
+- License: CC BY-SA 4.0 (Creative Commons Attribution-ShareAlike 4.0)
+- Used for: Chinese-English dictionary definitions (public/dict.json)
+- CC-CEDICT is maintained by MDBG. The data file is included as a
+  derived work under the ShareAlike terms.
