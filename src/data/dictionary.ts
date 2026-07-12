@@ -19,7 +19,7 @@ let loadPromise: Promise<void> | null = null
 async function ensureLoaded(): Promise<void> {
   if (dictData) return
   if (!loadPromise) {
-    loadPromise = fetch('/dict.json')
+    loadPromise = fetch(`${import.meta.env.BASE_URL}dict.json`)
       .then(r => r.json())
       .then(data => { dictData = data })
   }

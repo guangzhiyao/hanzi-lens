@@ -27,7 +27,7 @@ export function useHanziLookup() {
   function init(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        worker = new Worker('/workers/hanzi-lookup.worker.js')
+        worker = new Worker(`${import.meta.env.BASE_URL}workers/hanzi-lookup.worker.js`)
         worker.onmessage = handleMessage
         worker.onerror = (e) => {
           console.error('[hanzi-lookup] worker onerror:', e)
@@ -36,8 +36,8 @@ export function useHanziLookup() {
 
         worker.postMessage({
           type: 'init',
-          wasmJsUri: '/wasm/hanzi_lookup.js',
-          wasmUri: '/wasm/hanzi_lookup_bg.wasm',
+          wasmJsUri: `${import.meta.env.BASE_URL}wasm/hanzi_lookup.js`,
+          wasmUri: `${import.meta.env.BASE_URL}wasm/hanzi_lookup_bg.wasm`,
         })
 
         const timeout = setTimeout(() => {
