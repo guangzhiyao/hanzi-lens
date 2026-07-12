@@ -45,11 +45,15 @@ describe('numberedToToneMark', () => {
 })
 
 describe('formatPinyin', () => {
-  it('capitalizes single syllable', () => {
-    expect(formatPinyin('hao3')).toBe('Hǎo')
+  it('preserves input case for common nouns', () => {
+    expect(formatPinyin('hao3')).toBe('hǎo')
+  })
+
+  it('preserves input case for proper nouns', () => {
+    expect(formatPinyin('Zhong1')).toBe('Zhōng')
   })
 
   it('formats multi-syllable', () => {
-    expect(formatPinyin('ni3 hao3')).toBe('Nǐ Hǎo')
+    expect(formatPinyin('ni3 hao3')).toBe('nǐ hǎo')
   })
 })

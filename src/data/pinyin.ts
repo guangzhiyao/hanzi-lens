@@ -48,11 +48,9 @@ export function numberedToToneMark(pinyin: string): string {
   })
 }
 
-// Capitalize first letter
+// Convert numbered pinyin (hao3) to tone-marked pinyin (hǎo)
+// Preserves input case: "Du1" → "Dū" (proper noun), "dou1" → "dōu" (common)
 export function formatPinyin(pinyin: string): string {
   const parts = pinyin.split(' ')
-  return parts.map(p => {
-    const marked = numberedToToneMark(p)
-    return marked.charAt(0).toUpperCase() + marked.slice(1)
-  }).join(' ')
+  return parts.map(p => numberedToToneMark(p)).join(' ')
 }

@@ -35,7 +35,11 @@
         class="border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800"
       ></div>
 
-      <div class="flex gap-2">
+      <div v-if="!loadError && strokeCount > 0" class="text-xs text-gray-400 dark:text-gray-500">
+        {{ strokeCount }} stroke{{ strokeCount !== 1 ? 's' : '' }}
+      </div>
+
+      <div class="flex gap-2 items-center">
         <button
           class="px-4 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-40 text-gray-700 dark:text-gray-300"
           :disabled="!!loadError"
@@ -49,6 +53,16 @@
           @click="quizMode"
         >
           ✏️ Quiz
+        </button>
+        <button
+          class="px-4 py-1.5 text-sm border rounded-lg bg-white dark:bg-gray-800 transition-colors disabled:opacity-40"
+          :class="hardMode
+            ? 'border-amber-500 bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
+            : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'"
+          :title="hardMode ? 'Hard mode: no outline to trace' : 'Enable hard mode (no outline)'"
+          @click="hardMode = !hardMode"
+        >
+          💪 Hard
         </button>
       </div>
     </div>
@@ -81,6 +95,10 @@ const props = defineProps<{
   isDark: boolean
 }>()
 
+const emit = defineEmits<{
+  characterSelected: [char: string]
+}>()
+
 const character = ref('')
 const currentChar = ref<string | null>(null)
 const loadError = ref<string | null>(null)
@@ -90,6 +108,8 @@ const inputEl = ref<HTMLInputElement | null>(null)
 const showQuizResult = ref(false)
 const quizResultMessage = ref('')
 const quizResultDetail = ref('')
+const strokeCount = ref(0)
+const hardMode = ref(false)
 
 let writer: HanziWriter | null = null
 
@@ -121,15 +141,28 @@ function createWriter(char: string) {
       padding: 5,
       showOutline: true,
       showCharacter: false,
+      charDataLoader: (char, onLoad, onError) => {
+        fetch(`${import.meta.env.BASE_URL}data/chars/${char}.json`)
+          .then(r => {
+            if (!r.ok) throw new Error(`HTTP ${r.status}`)
+            return r.json()
+          })
+          .then(onLoad)
+          .catch(onError)
+      },
       strokeAnimationSpeed: 1.5,
       delayBetweenStrokes: 300,
       strokeColor: d ? '#e2e8f0' : '#1e293b',
       outlineColor: d ? '#374151' : '#e2e8f0',
       highlightColor: d ? '#f87171' : '#ef4444',
       radicalColor: d ? '#60a5fa' : '#3b82f6',
-      onLoadCharDataSuccess: () => { loadError.value = null },
-      onLoadCharDataError: (err: any) => {
-        loadError.value = String(err || 'Unknown error')
+      drawingColor: d ? '#e2e8f0' : '#333333',
+      onLoadCharDataSuccess: (data) => {
+        loadError.value = null
+        strokeCount.value = data.strokes.length
+      },
+      onLoadCharDataError: () => {
+        loadError.value = `No data for ${char}`
       },
     })
     writer.setCharacter(char)
@@ -155,6 +188,7 @@ function loadCharacter() {
   const char = character.value.trim()
   if (!char) return
   currentChar.value = char
+  emit('characterSelected', char)
 }
 
 function animate() {
@@ -163,14 +197,16 @@ function animate() {
 
 function quizMode() {
   if (!writer) return
+  if (hardMode.value) writer.hideOutline()
   writer.quiz({
     onMistake: () => {},
     onCorrectStroke: () => {},
     onComplete: (summary) => {
-      const total = summary.totalMistakes + summary.strokesRemaining
-      const pct = total > 0 ? Math.round((summary.strokesRemaining / total) * 100) : 100
-      quizResultMessage.value = `Accuracy: ${pct}%`
-      quizResultDetail.value = `${summary.strokesRemaining} correct, ${summary.totalMistakes} mistake${summary.totalMistakes !== 1 ? 's' : ''}`
+      if (hardMode.value) writer?.showOutline()
+      quizResultMessage.value = summary.totalMistakes === 0
+        ? 'Perfect! No mistakes!'
+        : `${summary.totalMistakes} mistake${summary.totalMistakes !== 1 ? 's' : ''}`
+      quizResultDetail.value = `${strokeCount.value} stroke${strokeCount.value !== 1 ? 's' : ''} total`
       showQuizResult.value = true
     },
     showHintAfterMisses: 2,
