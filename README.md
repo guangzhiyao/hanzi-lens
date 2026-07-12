@@ -115,17 +115,3 @@ unzip cedict.zip
 # Parse single-character entries (Python script in the build pipeline)
 python3 scripts/build_dict.py cedict_ts.u8 public/dict.json
 ```
-
-## Contributing
-
-Pull requests welcome. Areas that could use help:
-
-- Additional dictionary data (multi-character compounds, example sentences)
-- Character radical/component information
-- Spaced repetition (SRS) integration
-- PWA offline support
-- More quiz modes (meaning→character, pinyin→character)
-
-## Author
-
-Built as a learning companion for studying Chinese characters.
