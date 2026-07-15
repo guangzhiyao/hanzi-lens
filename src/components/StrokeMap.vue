@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col items-center w-full">
     <div v-if="loading" class="text-xs text-gray-400 dark:text-gray-500 text-center py-10">Loading...</div>
     <div v-else-if="error" class="text-xs text-red-500 text-center py-4">{{ error }}</div>
 
-    <div v-else-if="data" class="flex flex-col items-center gap-3 h-full">
+    <div v-else-if="data" class="flex flex-col items-center gap-3 h-full w-full">
       <svg
         :viewBox="charViewBox"
         class="w-full h-auto"
