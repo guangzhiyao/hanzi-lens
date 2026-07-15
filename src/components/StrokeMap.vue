@@ -20,8 +20,8 @@
           />
           <line :x1="gridMinX" :y1="midY" :x2="gridMinX + gridSize" :y2="midY" :stroke="gridColor" stroke-width="1" stroke-dasharray="6,4" />
           <line :x1="midX" :y1="gridMinY" :x2="midX" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="1" stroke-dasharray="6,4" />
-          <line :x1="gridMinX" :y1="gridMinY" :x2="gridMinX + gridSize" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="0.75" stroke-dasharray="4,6" />
-          <line :x1="gridMinX + gridSize" :y1="gridMinY" :x2="gridMinX" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="0.75" stroke-dasharray="4,6" />
+          <line :x1="gridMinX" :y1="gridMinY" :x2="gridMinX + gridSize" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="1.5" stroke-dasharray="4,6" />
+          <line :x1="gridMinX + gridSize" :y1="gridMinY" :x2="gridMinX" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="1.5" stroke-dasharray="4,6" />
           <!-- Strokes -->
           <path
             v-for="(stroke, i) in data.strokes"
@@ -93,7 +93,7 @@ const gridMinX = computed(() => gridCX.value - gridSize.value / 2)
 const gridMinY = computed(() => gridCY.value - gridSize.value / 2)
 
 const charViewBox = computed(() => {
-  const pad = gridSize.value * 0.06 + 12
+  const pad = gridSize.value * 0.04 + 6
   const size = gridSize.value + pad * 2
   return `${gridMinX.value - pad} ${gridMinY.value - pad} ${size} ${size}`
 })
