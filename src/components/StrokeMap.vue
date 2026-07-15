@@ -16,12 +16,12 @@
           <rect
             :x="gridMinX" :y="gridMinY"
             :width="gridSize" :height="gridSize"
-            :stroke="gridColor" stroke-width="1.5" fill="none"
+            :stroke="gridColor" stroke-width="2" fill="none"
           />
-          <line :x1="gridMinX" :y1="midY" :x2="gridMinX + gridSize" :y2="midY" :stroke="gridColor" stroke-width="0.75" stroke-dasharray="6,4" />
-          <line :x1="midX" :y1="gridMinY" :x2="midX" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="0.75" stroke-dasharray="6,4" />
-          <line :x1="gridMinX" :y1="gridMinY" :x2="gridMinX + gridSize" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="0.5" stroke-dasharray="4,6" />
-          <line :x1="gridMinX + gridSize" :y1="gridMinY" :x2="gridMinX" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="0.5" stroke-dasharray="4,6" />
+          <line :x1="gridMinX" :y1="midY" :x2="gridMinX + gridSize" :y2="midY" :stroke="gridColor" stroke-width="1" stroke-dasharray="6,4" />
+          <line :x1="midX" :y1="gridMinY" :x2="midX" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="1" stroke-dasharray="6,4" />
+          <line :x1="gridMinX" :y1="gridMinY" :x2="gridMinX + gridSize" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="0.75" stroke-dasharray="4,6" />
+          <line :x1="gridMinX + gridSize" :y1="gridMinY" :x2="gridMinX" :y2="gridMinY + gridSize" :stroke="gridColor" stroke-width="0.75" stroke-dasharray="4,6" />
           <!-- Strokes -->
           <path
             v-for="(stroke, i) in data.strokes"
@@ -81,11 +81,11 @@ const dataMinY = ref(0)
 const dataMaxX = ref(1024)
 const dataMaxY = ref(1024)
 
-// Square grid centered on character
+// Square grid with internal padding around character
 const gridSize = computed(() => {
-  const w = dataMaxX.value - dataMinX.value
-  const h = dataMaxY.value - dataMinY.value
-  return Math.max(w, h)
+  const w = (dataMaxX.value - dataMinX.value) * 1.15
+  const h = (dataMaxY.value - dataMinY.value) * 1.15
+  return Math.max(w, h, 50)
 })
 const gridCX = computed(() => (dataMinX.value + dataMaxX.value) / 2)
 const gridCY = computed(() => (dataMinY.value + dataMaxY.value) / 2)
@@ -93,7 +93,7 @@ const gridMinX = computed(() => gridCX.value - gridSize.value / 2)
 const gridMinY = computed(() => gridCY.value - gridSize.value / 2)
 
 const charViewBox = computed(() => {
-  const pad = gridSize.value * 0.08 + 20
+  const pad = gridSize.value * 0.06 + 12
   const size = gridSize.value + pad * 2
   return `${gridMinX.value - pad} ${gridMinY.value - pad} ${size} ${size}`
 })
@@ -105,7 +105,7 @@ const baseFillColor = computed(() => props.isDark ? 'rgba(176,190,197,0.25)' : '
 const activeFillColor = computed(() => props.isDark ? 'rgba(176,190,197,0.5)' : 'rgba(100,116,139,0.28)')
 const numberBgColor = computed(() => props.isDark ? '#64748b' : '#1e293b')
 const numberTextColor = computed(() => '#ffffff')
-const gridColor = computed(() => props.isDark ? '#334155' : '#d1d5db')
+const gridColor = computed(() => props.isDark ? '#475569' : '#cbd5e1')
 
 const midX = computed(() => gridCX.value)
 const midY = computed(() => gridCY.value)
