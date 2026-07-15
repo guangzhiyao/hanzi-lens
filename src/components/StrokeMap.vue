@@ -83,8 +83,8 @@ const dataMaxY = ref(1024)
 
 // Square grid with internal padding around character
 const gridSize = computed(() => {
-  const w = (dataMaxX.value - dataMinX.value) * 1.15
-  const h = (dataMaxY.value - dataMinY.value) * 1.15
+  const w = (dataMaxX.value - dataMinX.value) * 1.30
+  const h = (dataMaxY.value - dataMinY.value) * 1.30
   return Math.max(w, h, 50)
 })
 const gridCX = computed(() => (dataMinX.value + dataMaxX.value) / 2)
