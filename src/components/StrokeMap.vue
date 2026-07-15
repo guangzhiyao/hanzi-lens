@@ -6,7 +6,7 @@
     <div v-else-if="data" class="flex flex-col items-center gap-3 h-full">
       <svg
         :viewBox="charViewBox"
-        class="w-full h-full"
+        class="w-full h-auto"
         preserveAspectRatio="xMidYMid meet"
         xmlns="http://www.w3.org/2000/svg"
       >
