@@ -12,6 +12,17 @@
       >
         <!-- Y-flip: data uses bottom-left origin, SVG uses top-left -->
         <g :transform="`matrix(1 0 0 -1 0 ${dataMaxY + dataMinY})`">
+          <!-- 米字格 grid -->
+          <rect
+            :x="dataMinX" :y="dataMinY"
+            :width="dataMaxX - dataMinX" :height="dataMaxY - dataMinY"
+            :stroke="gridColor" stroke-width="1.5" fill="none"
+          />
+          <line :x1="dataMinX" :y1="midY" :x2="dataMaxX" :y2="midY" :stroke="gridColor" stroke-width="0.75" stroke-dasharray="6,4" />
+          <line :x1="midX" :y1="dataMinY" :x2="midX" :y2="dataMaxY" :stroke="gridColor" stroke-width="0.75" stroke-dasharray="6,4" />
+          <line :x1="dataMinX" :y1="dataMinY" :x2="dataMaxX" :y2="dataMaxY" :stroke="gridColor" stroke-width="0.5" stroke-dasharray="4,6" />
+          <line :x1="dataMaxX" :y1="dataMinY" :x2="dataMinX" :y2="dataMaxY" :stroke="gridColor" stroke-width="0.5" stroke-dasharray="4,6" />
+          <!-- Strokes -->
           <path
             v-for="(stroke, i) in data.strokes"
             :key="i"
@@ -83,6 +94,10 @@ const baseFillColor = computed(() => props.isDark ? 'rgba(176,190,197,0.25)' : '
 const activeFillColor = computed(() => props.isDark ? 'rgba(176,190,197,0.5)' : 'rgba(100,116,139,0.28)')
 const numberBgColor = computed(() => props.isDark ? '#64748b' : '#1e293b')
 const numberTextColor = computed(() => '#ffffff')
+const gridColor = computed(() => props.isDark ? '#334155' : '#d1d5db')
+
+const midX = computed(() => (dataMinX.value + dataMaxX.value) / 2)
+const midY = computed(() => (dataMinY.value + dataMaxY.value) / 2)
 
 function flipY(y: number): number {
   return dataMaxY.value + dataMinY.value - y
