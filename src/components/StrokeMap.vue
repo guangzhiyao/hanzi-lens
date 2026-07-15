@@ -93,7 +93,7 @@ const gridMinX = computed(() => gridCX.value - gridSize.value / 2)
 const gridMinY = computed(() => gridCY.value - gridSize.value / 2)
 
 const charViewBox = computed(() => {
-  const pad = gridSize.value * 0.04 + 6
+  const pad = gridSize.value * 0.02 + 3
   const size = gridSize.value + pad * 2
   return `${gridMinX.value - pad} ${gridMinY.value - pad} ${size} ${size}`
 })
